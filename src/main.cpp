@@ -3,9 +3,6 @@
 #include <GLFW/glfw3.h>
 #include <GLFW/glfw3native.h>
 
-#include <imgui.h>
-#include <imgui_impl_metal.h>
-
 #include <iostream>
 #include <fstream>
 #include <string>
