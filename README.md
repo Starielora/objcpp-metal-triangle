@@ -12,7 +12,7 @@ cmake --build . --config Debug|Release
 
 ## Run
 ```bash
-cd Debug|Release # shaders path is hardcoded :(
+cd Debug|Release
 ./objcpp-metal-triangle
 ```
 

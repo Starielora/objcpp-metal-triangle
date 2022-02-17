@@ -4,9 +4,6 @@
 #include <GLFW/glfw3native.h>
 
 #include <iostream>
-#include <fstream>
-#include <string>
-#include <filesystem>
 
 #import <Metal/Metal.h>
 #import <QuartzCore/QuartzCore.h>
@@ -14,7 +11,6 @@
 void quit(GLFWwindow *window, int key, int scancode, int action, int mods);
 GLFWwindow* createWindow(CAMetalLayer* metalLayer);
 CAMetalLayer* createMetalLayer(id<MTLDevice> gpu);
-std::string readFile(std::filesystem::path p);
 id<MTLRenderPipelineState> createPipelineState(id<MTLDevice> gpu);
 
 struct Vec2 { float x, y; };
@@ -90,7 +86,7 @@ GLFWwindow* createWindow(CAMetalLayer* metalLayer)
     }
 
     glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-    
+
     const auto window = glfwCreateWindow(800, 600, "objcpp-metal-triangle", nullptr, nullptr);
 
     if (window == nullptr)
@@ -119,19 +115,10 @@ CAMetalLayer* createMetalLayer(id<MTLDevice> gpu)
     return swapchain;
 }
 
-std::string readFile(std::filesystem::path p)
-{
-    auto file = std::ifstream(p);
-    assert(file.is_open());
-    return std::string(std::istreambuf_iterator<char>(file), std::istreambuf_iterator<char>());
-}
-
 id<MTLRenderPipelineState> createPipelineState(id<MTLDevice> gpu)
 {
-    const auto shaderSrc = readFile("../../assets/shaders.metal"); // back to root
-
     NSError* errors;
-    id<MTLLibrary> library = [gpu newLibraryWithSource:[NSString stringWithCString:shaderSrc.c_str() encoding:NSASCIIStringEncoding] options:nullptr error:&errors];
+    id<MTLLibrary> library = [gpu newLibraryWithFile:@"default.metallib" error:&errors];
     assert(!errors);
 
     id<MTLFunction> vertexShader = [library newFunctionWithName:@"vertex_main"];
